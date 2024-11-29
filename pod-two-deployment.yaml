@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-two
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-two
+  template:
+    metadata:
+      labels:
+        app: pod-two
+    spec:
+      containers:
+      - name: dynamic-app
+        image: snirkapah1/home_task:latest
+        env:
+        - name: SERVICE_REGISTRY_URL
+          value: "http://service-registry:2379"
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-registry
+  template:
+    metadata:
+      labels:
+        app: service-registry
+    spec:
+      containers:
+      - name: etcd
+        image: quay.io/coreos/etcd:v3.4.13
+        command:
+        - /usr/local/bin/etcd
+        - --data-dir=/etcd-data
+        - --advertise-client-urls=http://0.0.0.0:2379
+        - --listen-client-urls=http://0.0.0.0:2379
+        - --enable-v2=true 
+        ports:
+        - containerPort: 2379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-registry
+spec:
+  selector:
+    app: service-registry
+  ports:
+  - protocol: TCP
+    port: 2379
+    targetPort: 2379

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-one
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-one
+  template:
+    metadata:
+      labels:
+        app: pod-one
+    spec:
+      containers:
+      - name: static-app
+        image: snirkapah1/home_task_client:latest
+        imagePullPolicy: Always
+        env:
+        - name: SERVICE_REGISTRY_URL
+          value: "http://service-registry:2379"
